@@ -1,0 +1,125 @@
+body {
+  line-height: 1;
+  font-family: sans-serif;
+  text-align: left;
+  background-color: rgb(255, 255, 255);
+}
+
+.container-fluid {
+  width: 100vw;
+  height: 100vh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner-container {
+  display: inherit;
+  gap: 3rem;
+  flex-wrap: wrap;
+  flex-direction: row;
+  min-height: auto;
+  min-width: auto;
+  padding: 3rem 4.8rem;
+}
+
+section {
+  flex: 1;
+}
+
+section .title {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.428;
+  color: #000;
+  font-weight: 500;
+  margin-bottom: 2.4rem;
+}
+
+section .sub-title {
+  font-size: 1rem;
+  line-height: 1.428;
+  color: #333;
+  margin-bottom: 1.8rem;
+}
+
+form{
+  margin-top: 1.8rem;
+}
+
+.forgot-password
+{
+  margin-top: 1.8rem;
+  line-height: 1.428;
+}
+
+a {
+  color: #333;
+}
+
+a:hover {
+  color: rgb(0, 0, 0);
+  text-underline-offset: 0.3rem;
+}
+
+.forgot-password a:hover {
+  color: darkgray;
+  text-underline-offset: 0.3rem;
+  padding-bottom: 0.1rem;
+}
+
+#register u {
+  color: #333;
+  text-underline-offset: 0.4rem;
+  padding-bottom: 0.1rem;
+}
+
+#register ul {
+  margin-top: 1.8rem;
+  list-style: none;
+}
+
+#register li {
+  margin-bottom: 0.8rem;
+  line-height: 1.428;
+}
+
+#register ul li:before {
+  content: '✓  ';
+}
+
+/* Resend email page */
+
+.left-panel {
+  height: 400px;
+  width: 500px;
+  object-fit: fill;
+  border-radius: 10px;
+  clip-path: circle(40%);
+}
+
+.left-panel:hover {
+  animation-name: tossing;
+  -webkit-animation-name: tossing;
+  animation-duration: 2.5s;
+  -webkit-animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+}
+
+@keyframes tossing {
+  0% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(-10deg);
+  }
+}
+
+.email {
+  margin: 1.8rem 0;
+}
+
