@@ -87,9 +87,13 @@ const SignInRegister = () => {
                     <input name="password" type="password" className="form-control" onChange={handleChange} required/>
                 </div>
                 <button type="submit" className="btn btn-primary btn-block">Sign in</button>
-                <p className="forgot-password">
+                <p className="forgot-password mb-2">
                     <a href="/user/forgot-password">Forgotten your password?</a>
                 </p>
+                <select className="custom-select" id="sourceSelector">
+                <option selected defaultValue="none">Credentials.</option>
+                <option>Email: admin@crm.com | Pass: admin</option>
+            </select>
             </form>
         </section>
         <section id="register">

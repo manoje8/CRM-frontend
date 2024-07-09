@@ -131,7 +131,7 @@ const CreateCustomer = () => {
                             <div className="input-group mb-3">
                                 <select name="communicationMethod" className="custom-select" id="communicationSelector" onChange={handleChange}>
                                     <option selected defaultValue="email">Email</option>
-                                    <option value="metting">Meeting</option>
+                                    <option value="meeting">Meeting</option>
                                 </select>
                             </div>
                         </div>
