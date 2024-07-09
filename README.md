@@ -1,3 +1,5 @@
+## CRM
+
 This CRM application is designed to help businesses manage customer relationships efficiently. It includes functionalities for customer profile management, communication tracking, feedback collection, and report generation. The application is built using a full-stack approach with React for the frontend and Node.js, Express.js, and MongoDB for the backend.
 
 ### Features 
