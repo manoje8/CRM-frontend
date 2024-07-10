@@ -65,7 +65,7 @@ const Customer = () => {
                     <th scope="col">Company</th>
                     <th scope="col">Email Address</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Address</th>
+                    <th scope="col">Title</th>
                 </tr>
             </thead>
             <tbody>

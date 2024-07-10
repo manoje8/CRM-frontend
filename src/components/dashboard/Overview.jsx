@@ -95,7 +95,6 @@ const Overview = () => {
     // Update Status
     const STATUSURL = `${process.env.REACT_APP_API_URL}/customer/overview/update/status`
     const updateStatus = async (id, value) => {
-        console.log(id, value);
         try 
         {
             const response = await updateCustomerStatus(STATUSURL, id, value)
