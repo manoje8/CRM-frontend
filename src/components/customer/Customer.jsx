@@ -12,6 +12,7 @@ const Customer = () => {
 
     const navigate = useNavigate()
     const [customerData, setCustomerData] = useState([])
+    const [searchValue, setSearchValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     // Fetch customer details
@@ -54,6 +55,14 @@ const Customer = () => {
         navigate('/overview')
     }
 
+    // Search handle
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const searchResult = customerData.filter((data) =>
+            data.name.toLowerCase().includes(searchValue.toLowerCase())
+        );
+        setCustomerData(searchResult);
+    };
 
     const customerTable = () => (
         <table className="table">
@@ -88,7 +97,6 @@ const Customer = () => {
                             <td>{data.email}</td>
                             <td>{data.phone}</td>
                             <td>{data.title}</td> 
-                            
                         </tr>)
                     ))
                 }
@@ -97,10 +105,19 @@ const Customer = () => {
     )
 
     return (
-        <div className="container-fluid customer-container">
+        <div className="container customer-container">
             <div className="customer-nav">
-                
-                
+            <div className="search">
+                    <form className="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
+                        <input className="form-control mr-sm-2" value={searchValue}  type="search" aria-label="Search"
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            placeholder="Search by name" 
+                        />
+                        <button className="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">
+                            Search
+                        </button>
+                    </form>
+                </div>
 
                 <div className="d-flex">
                     <a className="btn btn-secondary" href="/create-new">Create New</a>

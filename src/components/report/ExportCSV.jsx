@@ -6,7 +6,6 @@ const ExportCSV = ({ data }) => {
     { label: "Total Sales", key: "totalSales" }
   ];
 
-  console.log(data);
 
   const csvData = data.map(sale => ({
     monthYear: `${sale._id.month}/${sale._id.year}`,

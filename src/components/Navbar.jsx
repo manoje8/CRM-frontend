@@ -44,7 +44,6 @@ const Navbar = () => {
 
 
     return (
-    <div className="container">
         <nav className="navbar navbar-expand-lg" id="navbar">
             <div className="container">   
 
@@ -78,7 +77,6 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
-    </div>
 )}
 
 export default Navbar

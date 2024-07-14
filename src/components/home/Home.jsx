@@ -28,13 +28,13 @@ const Home = () => {
             <hr />
             <a className="btn btn-secondary" href="/user/login">Get Started</a>
         </div>
-        <p className="lead text-center">Transform your business with CRM</p>
+        <p className="lead text-center text-light">Transform your business with CRM</p>
         
         <div className="features">
             {
                 feature.map((value, id) => (
                     <div key={id} className="card bg-dark" style={{width: "18rem"}}>
-                        <div class="card-body text-center">
+                        <div class="card-body text-center bg-light">
                             <h5 class="card-title">{value.cardTitle}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">{value.cardSub}</h6>
                             <hr className="bg-light"/>

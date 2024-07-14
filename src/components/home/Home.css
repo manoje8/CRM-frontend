@@ -1,10 +1,10 @@
 .home {
   height: 100%;
-  width: 100vw;
+  width: 100%;
   background: url('https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
   background-repeat: no-repeat;
   background-size: cover;
-  color: #e9ecef;
+  color: rgb(5, 25, 47);
   /* text-shadow: 1px 1px 2px rgb(255, 255, 255); */
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   line-height: 1.8;
