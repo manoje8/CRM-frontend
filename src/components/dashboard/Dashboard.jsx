@@ -53,7 +53,7 @@ const Dashboard = () => {
                         <p>Total customers: <span className="lead">{customerData.totalCustomers}</span></p>
                     </Cards>
                     <Cards>
-                        <p>New Customers: <span className="lead">{customerData.activeCustomers}</span></p>
+                        <p>Active Customers: <span className="lead">{customerData.activeCustomers}</span></p>
                     </Cards>
                     <Cards>
                         <p>conversion rate: <span className="lead">{customerData.conversionRate} %</span></p>
