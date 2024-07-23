@@ -63,7 +63,7 @@ export const postQuery = async(url, email, payload) => {
     }
 }
 
-// Fetch the queries
+// Fetch the all queries
 export const getQuery = async (url) => {
     try 
     {
@@ -75,6 +75,22 @@ export const getQuery = async (url) => {
         throw error
     }
 }
+
+// Fetch User Queries
+export const getUserQuery = async (url) => {
+
+    try 
+    {
+        const response = await axios.get(url);
+        return response.data;
+    } 
+    catch (error) 
+    {
+        throw error;
+    }
+}
+
+
 
 // Update the status of the query
 export const putQuery = async (url, id, payload) => {

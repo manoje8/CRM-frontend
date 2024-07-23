@@ -93,7 +93,9 @@ const SignInRegister = () => {
                     <a href="/user/forgot-password">Forgotten your password?</a>
                 </p>
                 <select className="custom-select" id="sourceSelector" defaultValue="">
-                    <option>Email: admin@crm.com | Pass: admin</option>
+                    <option>Email: admin@gmail.com | Pass: admin</option>
+                    <option>Manager: manager@gmail.com | Pass: 12345</option>
+                    <option>Employee: employee@gmail.com | Pass: 12345</option>
                 </select>
             </form>
         </section>

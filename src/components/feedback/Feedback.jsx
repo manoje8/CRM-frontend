@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import { AuthContext } from "../../context/AuthContext"
 import withAuth from "../../context/withAuth"
-import { getQuery, postQuery, putQuery, solutionQuery } from "../../service/UserService"
+import { getQuery, getUserQuery, postQuery, putQuery, solutionQuery } from "../../service/UserService"
 import dateFormat from "../../utils/DateFormater"
 
 const Feedback = () => {
@@ -68,13 +68,24 @@ const Feedback = () => {
     }
 
     // Retrieve queries
-    const fetchQueryURL = `${process.env.REACT_APP_API_URL}/service/queries`
+    
     const fetchQuery = useCallback(async () => {
         setIsLoading(true)
         try 
         {
-            const response = await getQuery(fetchQueryURL)
-            setAllUserQueries(response)
+            const fetchQueryURL = `${process.env.REACT_APP_API_URL}/service/queries`
+            const fetchUserQuery = `${process.env.REACT_APP_API_URL}/service/get-user-query/${userEmail}`
+
+            // Get the either employee or all queries
+            if(role === "employee")
+            {
+                const response = await getUserQuery(fetchUserQuery)
+                setAllUserQueries(response)
+            }else 
+            {
+                const response = await getQuery(fetchQueryURL)
+                setAllUserQueries(response)
+            }
         } 
         catch (error) 
         {
@@ -92,7 +103,7 @@ const Feedback = () => {
             setIsLoading(false)
         }
         
-    },[fetchQueryURL])
+    },[userEmail, role])
 
     useEffect(() => {
         fetchQuery();
