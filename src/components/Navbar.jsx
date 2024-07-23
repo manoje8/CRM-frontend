@@ -4,43 +4,22 @@ import "./Navbar.css"
 
 const Navbar = () => {
 
-    const {token, setToken, userName, setUserName, role, setRole, setUserId} = useContext(AuthContext)
+    const {token, setToken, userName, setUserName, role, setRole, setUserId, setUserEmail} = useContext(AuthContext)
     
     
-    // Logout the user
+    // Logout the user and remove the local data
     const logout = () => {
         setUserName(null)
         setToken(null);
         setRole(null);
         setUserId(null)
+        setUserEmail(null)
         localStorage.removeItem("name");
         localStorage.removeItem("token");
         localStorage.removeItem("role")
         localStorage.removeItem("userId")
+        localStorage.removeItem("email")
     }
-
-    
-    const adminNav = () => (
-        <ul className="navbar-nav">
-            <li className="nav-item">
-                <a className="nav-link sub-title" href="/dashboard">Dashboard </a>
-            </li>
-            <li className="nav-item">
-                <a className="nav-link sub-title" href="/customer">Customer</a>
-            </li>
-        </ul>
-    )
-
-    const userNav = () => (
-        <ul className="navbar-nav">
-            <li className="nav-item">
-                <a className="nav-link sub-title" href="/profile">Profile</a>
-            </li>
-            <li className="nav-item">
-                <a className="nav-link sub-title" href="/feedback">Feedback</a>
-            </li>
-        </ul>
-    )
 
 
     return (
@@ -53,7 +32,30 @@ const Navbar = () => {
                 </button>
 
                 <div className="collapse navbar-collapse" id="navbarNav">
-                    {token ? (role === "admin"? adminNav("admin") : userNav()): ""}
+                    {/* Authorised Navbar */}
+                    {token && role !== "new" ? 
+                        <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <a className="nav-link sub-title" href="/dashboard">Dashboard </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link sub-title" href="/customer">Customers</a>
+                            </li>
+                            {
+                            role === 'admin'? 
+                            <li className="nav-item">
+                                <a className="nav-link sub-title" href="/users">Users</a>
+                            </li>
+                            : ""
+                            }
+                            
+                            <li className="nav-item">
+                                <a className="nav-link sub-title" href="/feedback">Feedback</a>
+                            </li>
+                     
+                        </ul>
+                    : ""}
+               
                 </div>
 
                 <div>
@@ -67,7 +69,7 @@ const Navbar = () => {
                         <p>{userName}</p>
                         {token ? 
                         <div className="options">
-                            {role === 'admin' ? <a href="/dashboard">Dashboard</a> : <a href="/profile">Profile</a>}
+                            {role !== 'new' ? <a href="/dashboard">Dashboard</a> : " "}
                             <a href="/user/login" onClick={logout}>Logout</a> 
                         </div>
                         : 

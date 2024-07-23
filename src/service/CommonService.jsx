@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Create customer
 export const createCustomerApi = async(url, payload, token) => {
     try 
     {
@@ -34,7 +35,7 @@ export const createCustomerApi = async(url, payload, token) => {
     }
 }
 
-// update 
+// update the customer 
 export const putCustomer = async (url, payload) => {
     try 
     {

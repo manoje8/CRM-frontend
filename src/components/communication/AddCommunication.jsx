@@ -59,7 +59,6 @@ const AddCommunication  = ({userId}) => {
                         <select className="form-control" value={type} onChange={(e) => setType((e.target.value))} required>
                             <option value="" disabled>Select Type</option>
                             <option value="email">Email</option>
-                            <option value="meeting">Meeting</option>
                         </select>
                     </div>
                     

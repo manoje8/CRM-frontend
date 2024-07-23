@@ -1,19 +1,22 @@
 import { useCallback, useContext, useEffect, useState } from "react"
-import "./Overview.css"
 import { AuthContext } from "../../context/AuthContext"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 import LogCommunication from "../communication/LogCommunication"
-import LogPurchase from "../purchase/LogPurchase"
-import withAdmin from "../../context/withAdmin"
 import { putCustomer } from "../../service/CommonService"
 import { deleteCustomer, getCustomerById, updateCustomerStatus } from "../../service/AuthService"
+import { getUsers, updateCustomerAssign } from "../../service/UserService"
+import withAuth from "../../context/withAuth"
+import "./Overview.css"
+
+
 const Overview = () => {
 
-    const {token, userId} = useContext(AuthContext)
+    const {token, userId, role} = useContext(AuthContext)
     const navigate = useNavigate()
 
     const [customerView, setCustomerView] = useState([])
+    const [users, setUsers] = useState([])
     const [editFlag, setEditFlag] = useState(false);
     const [updateValue, setUpdateValue] = useState({
         name: "",
@@ -51,12 +54,8 @@ const Overview = () => {
         }
     },[customerURI, token])
 
-    useEffect(() => {
-        fetchData(userId)
-    },[fetchData, userId])
 
-
-    // update customer
+    // update customer by id
     const PUTURL = `${process.env.REACT_APP_API_URL}/customer/overview/update/${userId}`
     const updateCustomer = async(e) => {
         e.preventDefault()
@@ -92,7 +91,7 @@ const Overview = () => {
         }
     }
 
-    // Update Status
+    // Update Status of the customer
     const STATUSURL = `${process.env.REACT_APP_API_URL}/customer/overview/update/status`
     const updateStatus = async (id, value) => {
         try 
@@ -156,13 +155,73 @@ const Overview = () => {
         }
     };
 
+    // Fetch users and assign service
+
+    const fetchUsers = useCallback (async () => {
+        const ALLUSERSAPI = `${process.env.REACT_APP_API_URL}/user/all-users`
+        const response = await getUsers(ALLUSERSAPI);
+        switch(role)
+        {
+            // if role is admin, he can assign manager to customer
+            case 'admin':
+                const managers = response.filter(value => value.role === 'manager')
+                setUsers(managers)
+                break;
+            // if role is manager, he can assign employee to customer
+            case 'manager':
+                const employees = response.filter(value => value.role === 'employee')
+                setUsers(employees)
+                break;
+            default: 
+                break;
+        }
+    },[role])
+
+
+    // Assigning users to customer Handler
+    const handleAssign = async (id, value, roles) => {
+        try 
+        {
+            const ASSIGNAPI = `${process.env.REACT_APP_API_URL}/customer/overview/update/assign`
+            const response = await updateCustomerAssign(ASSIGNAPI, id, value, roles);
+            const {message} = response;
+            await fetchData(userId)
+            if(message)
+            {
+                toast.success(message, {
+                    position: "top-center",
+                    autoClose: 3000,
+                })
+            }
+
+        } 
+        catch (error) 
+        {
+            const {data, status}  = error.response
+            if(status === 400 || status.error === 500)
+            {
+                toast.error(data.message, {
+                    position: "bottom-center",
+                    hideProgressBar: true
+                })
+            }
+        }
+    }
+
+    // Handlers
+
+    useEffect(() => {
+        if(!userId) return
+        fetchData(userId)
+        fetchUsers()
+    },[fetchData, userId, fetchUsers])
+
     // Edit handler
     const handleEdit = () => {
         setEditFlag(true);
         setUpdateValue({...customerView})
     }
 
-    
     // Update handler
     const handleUpdate = ({ target:{ name, value }}) => {
         setUpdateValue({
@@ -174,14 +233,17 @@ const Overview = () => {
             },
         })
     }
-    
 
     return (
         <div className="modal-container">
             <div className="box">
                 <div className="overview-title">
                     <h4>Overview</h4>
-                    <button className="btn btn-warning" onClick={() => navigate("/customer")}>Back</button>
+                    <div className="col-md-3 d-flex justify-content-around">
+                        {/* <a className="btn btn-info btn-sm" href="/">Convert</a> */}
+                        <button className="btn btn-warning btn-sm" onClick={() => navigate("/customer")}>Back</button>
+                    </div>
+                    
                 </div>
                 
                 <div className="overview">
@@ -221,48 +283,79 @@ const Overview = () => {
                                         </div>
                                                 : 
                                         <div>
-                                            <button onClick={() => handleEdit()}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                    <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                                </svg>
-                                            </button>
-                                            <button>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" onClick={() => handleDelete(userId)} className="bi bi-trash" viewBox="0 0 16 16">
-                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                                                </svg>
-                                            </button>
+                                            {role !== "employee" ? 
+                                            <>
+                                                <button onClick={() => handleEdit()}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                                    </svg>
+                                                </button>
+                                                {role === "admin"?
+                                                <button>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" onClick={() => handleDelete(userId)} className="bi bi-trash" viewBox="0 0 16 16">
+                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                                    </svg>
+                                                </button>
+                                                : "" }
+                                            </>
+                                            : ""}
                                         </div>
                                     } 
                         </div>
 
                         <hr />
-
+                        <div>
+                            <LogCommunication userId={userId}/>
+                        </div>
+                        
+                    </section>
+                    <section className="ml-4">
+                        <h4>Status</h4>
+                        <div className="d-flex justify-content-around my-3">
+                            <div className="input-group col-md-6">
+                                <select name="status" value = {customerView.status} className="custom-select" id="statusSelector" onChange={(e) => updateStatus(customerView._id, e.target.value)}>
+                                    <option value="none">None</option>
+                                    <option value="contacted">Contacted</option>
+                                    <option value="not contacted">Not contacted</option>
+                                    <option value="contact in future">Contact in future</option>
+                                    <option value="qualified"> Qualified</option>
+                                    <option value="not qualified">Not qualified</option>
+                                    <option value="lost">Lost</option>
+                                </select>
+                            </div>
+                            <a className="btn btn-success" href="/communication">Connect to client</a> 
+                            {/* <a className="btn btn-info" href="/feedback">Feedback</a>  */}
+                        </div>
+                        <hr />
                         <div className="card col-md-8 mt-3">
                             <p><i>Information: </i></p>
                             <div><span><b>Title:  </b></span>{customerView.title}</div>
                             <div><span><b>Description:  </b></span>{customerView.description}</div>
                         </div>
-                    </section>
-                    <section className="ml-4">
-                        <h4>Activity</h4>
-                        <div className="d-flex justify-content-around my-3">
-                            <div className="input-group col-md-3">
-                                <select name="source" value = {customerView.status} className="custom-select" id="sourceSelector"onChange={(e) => updateStatus(customerView._id, e.target.value)}>
-                                    <option value="new">New</option>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                        <hr />
+                        {role === "manager" ? 
+                            <div className="input-group col-md-6">
+                                <label htmlFor="employeeSelector" className="initialism p-1">Assign To:</label>
+                                <select name="employee" className="custom-select" id="employeeSelector" value={customerView.assignEmployee || ""} onChange={(e) => handleAssign(customerView._id, e.target.value, 'employee')}>
+                                    <option value="" >Select an employee</option>
+                                    {users.map((user, id) => (
+                                        <option key={id} value={user.email}>{user.name}</option>
+                                    ))}
+                                    
                                 </select>
                             </div>
-                            <a className="btn btn-success" href="/communication">Connect</a> 
-                            <a className="btn btn-info" href="/feedback">Feedback</a> 
-                        </div>
-                        <div>
-                            <LogCommunication userId={userId}/>
-                            <hr />
-                            <LogPurchase userId={userId} />
-                        </div>
+                            : role === "admin" ?
+                                <div className="input-group col-md-6">
+                                    <label htmlFor="managerSelector" className="initialism p-1">Assign To:</label>
+                                    <select name="manager" className="custom-select" id="managerSelector" value={customerView.assignManager || ""} onChange={(e) => handleAssign(customerView._id, e.target.value, 'manager')}>
+                                        <option value="" >Select a Manager</option>
+                                        {users.map((user, id) => (
+                                            <option  key={id} value={user.email}>{user.name}</option>
+                                        ))}
+                                    </select>
+                                </div> : ""}
                     </section>
                 </div>
             </div>
@@ -270,4 +363,4 @@ const Overview = () => {
     )
 }
 
-export default withAdmin(Overview)
+export default withAuth(Overview)

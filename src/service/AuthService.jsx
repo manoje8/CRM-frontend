@@ -1,17 +1,12 @@
 import axios from "axios";
 
-// customers
+// Customers component
 
-export const getCustomers = async (url, token) => {
+// Get the all customers
+export const getCustomers = async (url) => {
     try 
     {
-        const response = await axios(url,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        )
+        const response = await axios(url)
 
         return response.data
     } 
@@ -21,7 +16,7 @@ export const getCustomers = async (url, token) => {
     }
 }
 
-// Overview
+// Fetch the customer by Id
 export const getCustomerById = async (url, token) => {
     try 
     {
@@ -41,7 +36,7 @@ export const getCustomerById = async (url, token) => {
     }
 }
 
-
+// Update the customer status by Id
 export const updateCustomerStatus = async (url, id, payload) => {
     try 
     {
@@ -64,6 +59,7 @@ export const updateCustomerStatus = async (url, id, payload) => {
     }
 }
 
+// Delete the customer (Admin)
 export const deleteCustomer = async (url) => {
     try 
     {
@@ -84,7 +80,9 @@ export const deleteCustomer = async (url) => {
 
 
 
-// communication
+// communication Component
+
+// Post the communication
 export const addCommunication = async(url, id, type, subject, content) => {
     try 
     {
@@ -108,6 +106,7 @@ export const addCommunication = async(url, id, type, subject, content) => {
     }
 }
 
+// Fetch the communication log
 export const getCommunication = async (url) => {
     try 
     {

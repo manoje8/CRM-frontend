@@ -68,3 +68,8 @@ tbody button {
     background: none;
     border: none;
 }
+
+.form-group .control-label:after {
+    content:"*";
+    color:red;
+  }

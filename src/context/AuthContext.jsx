@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
     // Admin
     const [userId, setUserId] = useState(null)
     const [userName, setUserName] = useState(null)
+    const [userEmail, setUserEmail] = useState(null)
     // Role
     const [role, setRole] = useState(null)
     const [token, setToken] = useState(null);
@@ -17,6 +18,8 @@ const AuthProvider = ({ children }) => {
         setUserId(storedUser);
         const storedName = localStorage.getItem("name")
         setUserName(storedName);
+        const storedEmail = localStorage.getItem("email")
+        setUserEmail(storedEmail);
         const storedRole = localStorage.getItem("role")
         setRole(storedRole);
         const storedToken = localStorage.getItem("token");
@@ -34,6 +37,8 @@ const AuthProvider = ({ children }) => {
         loading,
         userName,
         setUserName,
+        userEmail,
+        setUserEmail,
         userId,
         setUserId,
         role,

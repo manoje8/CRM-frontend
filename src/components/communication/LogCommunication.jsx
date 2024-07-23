@@ -7,7 +7,7 @@ const LogCommunication = ({userId}) => {
     const [communications, setCommunications] = useState([]);
 
     const GETURL = `${process.env.REACT_APP_API_URL}/communication/${userId}/communications`
-    const fetchData = useCallback(async (userId) => {
+    const fetchData = useCallback(async () => {
         try 
         {
             const response = await getCommunication(GETURL)

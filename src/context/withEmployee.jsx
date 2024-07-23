@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 
 // Restricted access ensures only authorized users
-const withUser = (WrapperComponent) => (props) => {
+const withEmployee = (WrapperComponent) => (props) => {
     const {token, loading, role} = useContext(AuthContext)
 
     if(loading)
@@ -16,7 +16,7 @@ const withUser = (WrapperComponent) => (props) => {
         return <Navigate to="/user/login" replace />; 
     }
 
-    if(role !== "user")
+    if(role !== "employee")
     {
         return <Navigate to="/" replace />;
     }
@@ -24,4 +24,4 @@ const withUser = (WrapperComponent) => (props) => {
     return <WrapperComponent {...props}/>
 }
 
-export default withUser
+export default withEmployee

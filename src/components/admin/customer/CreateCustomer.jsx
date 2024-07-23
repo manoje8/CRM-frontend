@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom"
-import Spinner from "../Spinner"
+import Spinner from "../../Spinner"
 import { useContext, useState } from "react"
 import { toast } from "react-toastify"
 import "./Customer.css"
-import { AuthContext } from "../../context/AuthContext"
-import withAuth from "../../context/withAuth"
-import { createCustomerApi } from "../../service/CommonService"
+import { AuthContext } from "../../../context/AuthContext"
+import { createCustomerApi } from "../../../service/CommonService"
+import withAdmin from "../../../context/withAdmin"
 
 const CreateCustomer = () => {
     const {token} = useContext(AuthContext)
@@ -50,7 +50,7 @@ const CreateCustomer = () => {
                     autoClose: 3000,
                 })
             }
-            navigate("/")
+            navigate("/customer")
         } catch (error) 
         {
             setLoading(false)
@@ -77,37 +77,37 @@ const CreateCustomer = () => {
                 <div className="row px-5 py-2">
                     <div className="col">
                         <div className="form-group">
-                            <label>Company</label>
-                            <input name="company" type="text" className="form-control" onChange={handleChange} required/>
+                            <label className="control-label">Company</label>
+                            <input name="company" type="text" className="form-control" onChange={handleChange} required />
                         </div>
                         <div className="form-group">
-                            <label>Name</label>
+                            <label className="control-label">Name</label>
                             <input name="name" className="form-control" onChange={handleChange} required/>
                         </div>
                         <div className="form-group">
                             <label>Title</label>
-                            <input name="title" type="text" className="form-control" onChange={handleChange} required/>
+                            <input name="title" type="text" className="form-control" onChange={handleChange}/>
                         </div>
                         <div className="form-group">
                             <label>Address</label>
-                            <input name="address" type="text" className="form-control" onChange={handleChange} required/>
+                            <input name="address" type="text" className="form-control" onChange={handleChange}/>
                         </div>
                     </div>
 
                     <div className="col">
                         <div className="form-group">
-                            <label>Email address</label>
+                            <label className="control-label">Email address</label>
                             <input name="email" type="email" className="form-control" onChange={handleChange} required/>
                         </div>
                         <div className="form-group">
-                            <label>Phone</label>
+                            <label className="control-label">Phone</label>
                             <input name="phone" type="number" className="form-control" onChange={handleChange} required/>
                         </div>
                         <div className="form-group">
                             <label>Source</label>
                             <div className="input-group mb-3">
-                                <select name="source" className="custom-select" id="sourceSelector" onChange={handleChange}>
-                                    <option selected defaultValue="none">None...</option>
+                                <select name="source" className="custom-select" id="sourceSelector" defaultValue="none" onChange={handleChange}>
+                                    <option defaultValue="none">None...</option>
                                     <option value="website form">website form</option>
                                     <option value="social media">Social media</option>
                                     <option value="referral">Referrral</option>
@@ -117,7 +117,7 @@ const CreateCustomer = () => {
                         </div>
                         <div className="form-group">
                             <label>Description</label>
-                            <input name="description" type="text" className="form-control" onChange={handleChange} required/>
+                            <input name="description" type="text" className="form-control" onChange={handleChange}/>
                         </div>
                     </div>
                 </div>
@@ -127,27 +127,27 @@ const CreateCustomer = () => {
                 <div className="row px-5 py-2">
                     <div className="col">
                         <div className="form-group">
-                            <label>Communication Method</label>
+                            <label className="control-label">Communication Method</label>
                             <div className="input-group mb-3">
-                                <select name="communicationMethod" className="custom-select" id="communicationSelector" onChange={handleChange}>
-                                    <option selected defaultValue="email">Email</option>
+                                <select name="communicationMethod" className="custom-select" id="communicationSelector" defaultValue="email" onChange={handleChange}>
+                                    <option value="email">Email</option>
                                     <option value="meeting">Meeting</option>
                                 </select>
                             </div>
                         </div>
                         <div className="form-group">
                             <label>Fabric Types</label>
-                            <input name="fabricTypes" type="text" className="form-control" onChange={handleChange} required/>
+                            <input name="fabricTypes" type="text" className="form-control" onChange={handleChange}/>
                         </div>
                     </div>
                     <div className="col">
                         <div className="form-group">
                             <label>Brand</label>
-                            <input name="brand" type="text" className="form-control" onChange={handleChange} required/>
+                            <input name="brand" type="text" className="form-control" onChange={handleChange}/>
                         </div>
                         <div className="form-group">
                             <label>Colors</label>
-                            <input name="colors" type="text" className="form-control" onChange={handleChange} required/>
+                            <input name="colors" type="text" className="form-control" onChange={handleChange}/>
                         </div>
                     </div>
                 </div>
@@ -166,4 +166,4 @@ const CreateCustomer = () => {
     )
 }
 
-export default withAuth(CreateCustomer)
+export default withAdmin(CreateCustomer)

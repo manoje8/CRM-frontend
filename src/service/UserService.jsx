@@ -1,13 +1,32 @@
 import axios from "axios"
 
-// Profile
-export const getProfileUser = async (url, token) => {
+// Fetch all the users (Admin)
+export const getUsers = async (url) => {
     try 
     {
-        const response = await axios(url,
+        const response = await axios(url)
+        return response.data
+    } 
+    catch (error) 
+    {
+        throw error
+    }
+}
+
+
+
+// Add service to the customer(Admin -> Manager -> Employee)
+export const updateCustomerAssign = async (url, id, value, role) => {
+    try 
+    {
+        const response = await axios(
             {
-                headers: {
-                    Authorization: `Bearer ${token}`
+                method: 'put',
+                url: url,
+                data: {
+                    id,
+                    userMail: value,
+                    role,
                 }
             }
         )
@@ -21,55 +40,17 @@ export const getProfileUser = async (url, token) => {
 }
 
 
+//  Feedback
 
-// purchase
-
-export const addPurchase = async (url, token, payload) => {
-    try 
-    {
-        const response = await axios(
-        {
-            method: 'post',
-            url: url,
-            data: {
-                productName: payload.productName,
-                amount: parseFloat(payload.amount),
-                quantity: parseFloat(payload.quantity),
-            },
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        return response.data
-    } 
-    catch (error) 
-    {
-        throw error
-    }
-}
-
-export const getPurchases = async (url) => {
-    try 
-    {
-        const response = await axios(url)
-        return response.data
-    } 
-    catch (error) 
-    {
-        throw error
-    }
-}
-
-// Feedback
-
-export const postQuery = async(url, id, payload) => {
+// Add the query
+export const postQuery = async(url, email, payload) => {
     try 
     {
         const response = await axios({
             method: 'post',
                 url: url,
                 data: {
-                    customerId: id,
+                    userEmail: email,
                     subject: payload.subject,
                     description: payload.description
                 }
@@ -82,6 +63,7 @@ export const postQuery = async(url, id, payload) => {
     }
 }
 
+// Fetch the queries
 export const getQuery = async (url) => {
     try 
     {
@@ -94,13 +76,14 @@ export const getQuery = async (url) => {
     }
 }
 
+// Update the status of the query
 export const putQuery = async (url, id, payload) => {
     try 
     {
         const response = await axios(
         {
             method: 'put',
-            url: `${process.env.REACT_APP_API_URL}/service/update-query`,
+            url: url,
             data: {
                 queryId: id,
                 status: payload,
@@ -115,6 +98,7 @@ export const putQuery = async (url, id, payload) => {
     }
 }
 
+// Give solution to the query
 export const solutionQuery = async (url, payload) => {
     try 
     {

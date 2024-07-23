@@ -1,19 +1,19 @@
 import { useCallback, useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
+import { AuthContext } from "../../../context/AuthContext"
 import { toast } from "react-toastify";
-import "./Customer.css"
 import { useNavigate } from "react-router-dom";
-import withAdmin from "../../context/withAdmin";
-import { getCustomers } from "../../service/AuthService";
-
+import { getCustomers } from "../../../service/AuthService";
+import "./Customer.css"
+import withAuth from "../../../context/withAuth";
 
 const Customer = () => {
-    const {token, setUserId} = useContext(AuthContext);
+    const {token, setUserId, role, userEmail} = useContext(AuthContext);
 
     const navigate = useNavigate()
     const [customerData, setCustomerData] = useState([])
     const [searchValue, setSearchValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
 
     // Fetch customer details
     const customerURI = `${process.env.REACT_APP_API_URL}/customer/get-customers`
@@ -22,9 +22,22 @@ const Customer = () => {
         try 
         {
             const response = await getCustomers(customerURI,token)
-
-            setCustomerData(response)
+            switch (role) {
+                case "employee":
+                    const employees = response.filter(data => data.assignEmployee === userEmail)
+                    setCustomerData(employees)
+                    break;
+                case "manager":
+                    const managers = response.filter(data => data.assignManager === userEmail)
+                    setCustomerData(managers)
+                    break;
+            
+                default:
+                    setCustomerData(response)
+                    break;
+            }
             setUserId(null)
+            localStorage.removeItem("userId")
         } 
         catch (error) 
         {
@@ -40,8 +53,8 @@ const Customer = () => {
         finally 
         {
             setIsLoading(false);
-          }
-    },[customerURI, token, setUserId])
+        }
+    },[customerURI, token, setUserId, role, userEmail])
 
 
     useEffect(() => {
@@ -50,6 +63,7 @@ const Customer = () => {
 
     // Overview handler
     const handleClick = (id) => {
+        // get the customer by ID for saving the customer Id to storage
         setUserId(id)
         localStorage.setItem("userId", id)
         navigate('/overview')
@@ -63,6 +77,7 @@ const Customer = () => {
         );
         setCustomerData(searchResult);
     };
+
 
     const customerTable = () => (
         <table className="table">
@@ -96,7 +111,7 @@ const Customer = () => {
                             <td>{data.company}</td>
                             <td>{data.email}</td>
                             <td>{data.phone}</td>
-                            <td>{data.title}</td> 
+                            <td>{data.title}</td>
                         </tr>)
                     ))
                 }
@@ -120,7 +135,9 @@ const Customer = () => {
                 </div>
 
                 <div className="d-flex">
-                    <a className="btn btn-secondary" href="/create-new">Create New</a>
+                    {role === "admin" ?
+                        <a className="btn btn-secondary" href="/create-new">Create New</a>
+                    : ""}
                     
                 </div>
             </div>
@@ -131,4 +148,4 @@ const Customer = () => {
     )
 }
 
-export default withAdmin(Customer)
+export default withAuth(Customer)

@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const SignInRegister = () => {
     const navigate = useNavigate()
-    const {setToken, setUserName, setRole} = useContext(AuthContext)
+    const {setToken, setUserName, setRole, setUserEmail} = useContext(AuthContext)
     const [values, setValues] = useState({
         email: "",
         password: ""
@@ -35,10 +35,12 @@ const SignInRegister = () => {
                 }
             })
 
-            const {message, accessToken, userName, role} = response.data;
+            const {message, accessToken, userName, role, email} = response.data;
             // save the response date into local storage
             setUserName(userName)
             localStorage.setItem("name", userName)
+            setUserEmail(email)
+            localStorage.setItem("email", email)
             setRole("role", role)
             localStorage.setItem("role", role)
             setToken(accessToken);
@@ -90,10 +92,9 @@ const SignInRegister = () => {
                 <p className="forgot-password mb-2">
                     <a href="/user/forgot-password">Forgotten your password?</a>
                 </p>
-                <select className="custom-select" id="sourceSelector">
-                <option selected defaultValue="none">Credentials.</option>
-                <option>Email: admin@crm.com | Pass: admin</option>
-            </select>
+                <select className="custom-select" id="sourceSelector" defaultValue="">
+                    <option>Email: admin@crm.com | Pass: admin</option>
+                </select>
             </form>
         </section>
         <section id="register">
@@ -101,7 +102,7 @@ const SignInRegister = () => {
             <span className="sub-title">Creating an account is easy. By registering, you will be able to:</span>
             <ul>
                 <li>Check out faster with your saved details</li>
-                <li>Discover our new collections, receive news from the maison.</li>
+                <li>Discover our new features, receive news from the maison.</li>
                 <li>Manage your profile and preferences</li>
             </ul>
 

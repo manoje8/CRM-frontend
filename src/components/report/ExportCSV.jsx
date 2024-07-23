@@ -1,16 +1,17 @@
 import { CSVLink } from 'react-csv';
 
-const ExportCSV = ({ data }) => {
+const ExportCSV = ({ leadSource}) => {
+  // Export source data
   const headers = [
-    { label: "Month/Year", key: "monthYear" },
-    { label: "Total Sales", key: "totalSales" }
+    { label: "Lead Source", key: "source" },
+    { label: "Count", key: "count" }
   ];
 
-
-  const csvData = data.map(sale => ({
-    monthYear: `${sale._id.month}/${sale._id.year}`,
-    totalSales: sale.totalSales
+  const csvData = Object.keys(leadSource).map((source) => ({
+    source: source,
+    count: leadSource[source]
   }));
+  
 
   return (
     <CSVLink data={csvData} headers={headers} filename={"sales-report.csv"}>

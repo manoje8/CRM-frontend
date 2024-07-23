@@ -34,11 +34,11 @@ const Home = () => {
             {
                 feature.map((value, id) => (
                     <div key={id} className="card bg-dark" style={{width: "18rem"}}>
-                        <div class="card-body text-center bg-light">
-                            <h5 class="card-title">{value.cardTitle}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{value.cardSub}</h6>
+                        <div className="card-body text-center bg-light">
+                            <h5 className="card-title">{value.cardTitle}</h5>
+                            <h6 className="card-subtitle mb-2 text-muted">{value.cardSub}</h6>
                             <hr className="bg-light"/>
-                            <p class="card-text">{value.cardText}</p>
+                            <p className="card-text">{value.cardText}</p>
                         </div>
                      </div>
                 ))

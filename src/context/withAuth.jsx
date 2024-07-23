@@ -4,7 +4,7 @@ import { AuthContext } from "./AuthContext";
 
 // Restricted access ensures only authorized users
 const withAuth = (WrapperComponent) => (props) => {
-    const {token, loading} = useContext(AuthContext)
+    const {token, loading, role} = useContext(AuthContext)
 
     if(loading)
     {
@@ -14,6 +14,11 @@ const withAuth = (WrapperComponent) => (props) => {
     if (!token) 
     {
         return <Navigate to="/user/login" replace />; 
+    }
+
+    if (role === 'new') 
+    {
+        return <Navigate to="/" replace />; 
     }
 
     return <WrapperComponent {...props}/>

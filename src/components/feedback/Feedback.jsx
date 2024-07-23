@@ -3,9 +3,10 @@ import { toast } from "react-toastify"
 import { AuthContext } from "../../context/AuthContext"
 import withAuth from "../../context/withAuth"
 import { getQuery, postQuery, putQuery, solutionQuery } from "../../service/UserService"
+import dateFormat from "../../utils/DateFormater"
 
 const Feedback = () => {
-    const { role, userId} = useContext(AuthContext);
+    const { role, userEmail} = useContext(AuthContext);
     const [solution, setSolution] = useState(
         {
             queryId: "",
@@ -18,6 +19,7 @@ const Feedback = () => {
     })
 
     const [allUserQueries, setAllUserQueries] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = ({target: {name, value}}) => {
         setQuery({
@@ -26,14 +28,14 @@ const Feedback = () => {
         })
     }
 
-    // Add query
+    // Post query
     const POSTAPI = `${process.env.REACT_APP_API_URL}/service/add-query`
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         try 
         {
-            const response = await postQuery(POSTAPI, userId, query)
+            const response = await postQuery(POSTAPI, userEmail, query)
             const {message} = response;
 
             if(message)
@@ -66,11 +68,12 @@ const Feedback = () => {
     }
 
     // Retrieve queries
-    const fetchQueryURL = `${process.env.REACT_APP_API_URL}/service/get-queries-byId/${userId}`
+    const fetchQueryURL = `${process.env.REACT_APP_API_URL}/service/queries`
     const fetchQuery = useCallback(async () => {
+        setIsLoading(true)
         try 
         {
-            const response = await getQuery( fetchQueryURL)
+            const response = await getQuery(fetchQueryURL)
             setAllUserQueries(response)
         } 
         catch (error) 
@@ -84,13 +87,16 @@ const Feedback = () => {
                 })
             }
         }
+        finally
+        {
+            setIsLoading(false)
+        }
         
     },[fetchQueryURL])
 
     useEffect(() => {
-        if(!userId) return
         fetchQuery();
-    },[fetchQuery, userId])
+    },[fetchQuery])
 
 
     // Update status of the query
@@ -102,7 +108,7 @@ const Feedback = () => {
 
             setAllUserQueries(response.queries)
             const {message} = response;
-
+            await fetchQuery();
             if(message)
             {
                 toast.success(message, {
@@ -125,7 +131,7 @@ const Feedback = () => {
         }
     }
 
-    // Set query solution
+    // Set solution to their respective query
     const SOLUTIONAPI = `${process.env.REACT_APP_API_URL}/service/query-solution`
     const querySolution = async () => {
         try 
@@ -176,42 +182,57 @@ const Feedback = () => {
 
     // Solution log
     const querySolutionLog = (query) => (
-        <td>
+        <>
             {query.solution.map((message,id) => (
                 <div key={id}>
                     <p>{message}</p>
-                    <hr />
                 </div>
             ))}
-        </td>
+        </>
     )
 
     return (
         <div className="container">
-            {role === "user" ? createQuery() : ""}
+            {/* Employee only can create query to management */}
+            {role === "employee" ? createQuery() : ""}
             <section>
                 <p className="lead mb-2">Queries</p>
                 <table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Date</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Subject</th>
                             <th scope="col">Description</th>
                             <th scope="col">Status</th>
-                            {role === "user" ? <th scope="col">Solution</th> : 
-                            <>
-                                <th scope="col">Message</th>
+                            {role === "employee" ? (
                                 <th scope="col">Solution</th>
-                            </>
-                            }
+                                ): (
+                                <>
+                                    <th scope="col">Message</th>
+                                    <th scope="col">Solution</th>
+                                </>
+                            )}
                             
                         </tr>
                     </thead>
                     <tbody>
-                        {
+                    {
+                        isLoading ? (
+                            <tr>
+                                <td colSpan={8}>Loading...</td> 
+                            </tr>
+                        ) : allUserQueries.length === 0 ? (
+                            <tr>
+                                <td colSpan={8}>No queries found</td>
+                            </tr>
+                        ) :
                             allUserQueries.map((query, id) => (
                                 <tr key={id}>
-                                    <td>{new Date(query.createdAt).toLocaleString()}</td>
+                                    <td>{dateFormat(query.createdAt)}</td>
+                                    <td>{query.userId.name}</td>
+                                    <td>{query.userId.role}</td>
                                     <td>{query.subject}</td>
                                     <td>{query.description}</td>
                                     <td>
@@ -221,11 +242,12 @@ const Feedback = () => {
                                             <option value="Resolved">Resolved</option>
                                         </select>
                                     </td>
-                                    {role === "admin"? 
+                                    {/* Management can reply to the queries */}
+                                    {role !== "employee"? 
                                     <>
                                         <td>
                                             <form onSubmit={querySolution} className="d-flex m-0">
-                                                <div className="p-1">
+                                                <div className="pr-1">
                                                     <input name="solution" className="" onChange={(e) => setSolution({queryId: query._id, message: e.target.value})} required/>
                                                 </div>
                                                 <button type="submit" className="btn btn-primary btn-sm" >Send</button>
