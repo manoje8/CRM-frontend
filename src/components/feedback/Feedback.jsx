@@ -144,13 +144,13 @@ const Feedback = () => {
 
     // Set solution to their respective query
     const SOLUTIONAPI = `${process.env.REACT_APP_API_URL}/service/query-solution`
-    const querySolution = async () => {
+    const querySolution = async (e) => {
+        e.preventDefault()
         try 
         {
             const response = await solutionQuery(SOLUTIONAPI, solution)
-            
             const {message} = response;
-
+            await fetchQuery();
             if(message)
             {
                 toast.success(message, {
