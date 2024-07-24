@@ -196,7 +196,9 @@ const Feedback = () => {
         <>
             {query.solution.map((message,id) => (
                 <div key={id}>
-                    <p>{message}</p>
+                    <ul>
+                        <li>{message}</li>
+                    </ul>
                 </div>
             ))}
         </>
