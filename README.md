@@ -4,7 +4,7 @@ This CRM application is designed to help businesses manage customer relationship
 
 - Manage customer profiles effectively.
 - Track and analyze communication history.
-- Gather valuable customer feedback.
+- Gather valuable employee feedback.
 - Generate insightful reports for data-driven decision making.
 
 The application leverages a full-stack development approach:
@@ -19,7 +19,7 @@ The application leverages a full-stack development approach:
     - Role-based access control (Admin, Manager, Employee) for enhanced security.
 - **Comprehensive Customer Management:**
     - CRUD (Create, Read, Update, Delete) functionalities for customer profiles.
-    - Track customer purchase history and preferences for personalized experiences.
+    - Track customer communication history and preferences for personalized experiences.
 - **Streamlined Communication Tracking:**
     - Record and manage all customer interactions (emails, meetings) for a centralized view.
     - Maintain a detailed communication history for future reference.
@@ -38,7 +38,7 @@ The application leverages a full-stack development approach:
 - **User Management:** User list with role assignment and deletion (Admin-only)
 - **Customer Management:**
     - Customer list with search options
-    - Detailed customer profiles with conditional access (Admin: edit/delete, Manager: edit, Employee: view)
+    - Detailed customer profiles with conditional access
     - Service assignment (Admin -> Manager -> Employee)
 - **Communication Management:** Form for logging and viewing customer interactions
 - **Feedback Management:** Feedback submission (Employee) and response system (Management)
@@ -53,7 +53,7 @@ The application leverages a full-stack development approach:
 - `/reset-password`: Route to complete password reset process
 - `/dashboard`: Role-specific dashboard (Admin, Manager, Employee)
 - `/create-new`: Admin-restricted route for creating new customers
-- `/customer`: Role-based customer view (Admin: all, Manager: assigned, Employee: assigned by manager)
+- `/customer`: Role-based customer view
 - `/overview`: Detailed customer profile with relevant information
 - `/users`: Admin-only route for managing user accounts and roles
 - `/communication`: Send emails and view communication history for each customer
