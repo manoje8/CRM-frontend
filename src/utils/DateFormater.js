@@ -1,5 +1,7 @@
 const dateFormat = (date) => {
-    return new Date(date).toLocaleString().split(',')[0]
+    if(!date) return "NA"
+    const formated = new Date(date).toLocaleString().split(',')[0]
+    return formated
 }
 
 export default dateFormat
