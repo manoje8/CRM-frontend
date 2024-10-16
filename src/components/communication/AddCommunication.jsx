@@ -74,9 +74,9 @@ const AddCommunication  = ({userId}) => {
                         </div>
                     </div>
                     {!loading ? 
-                    <button type="submit" className="btn btn-primary btn-block" >Add</button> 
+                    <button type="submit" className="btn btn-primary btn-block" >Send</button> 
                     :
-                    <Spinner buttonName={"Sending"}/>
+                    <Spinner buttonName={"Sending..."}/>
                     }
                     <a className="btn btn-link" href="/overview">Back</a>
                 </form>

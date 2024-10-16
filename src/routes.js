@@ -10,7 +10,7 @@ import Dashboard from "./components/admin/dashboard/Dashboard"
 import Customer from "./components/admin/customer/Customer"
 import Feedback from "./components/feedback/Feedback"
 import CreateCustomer from "./components/admin/customer/CreateCustomer"
-import Overview from "./components/overview/Overview"
+import Overview from "./components/admin/overview/Overview"
 import Communication from "./components/communication/Communication"
 import Users from "./components/admin/users/Users"
 

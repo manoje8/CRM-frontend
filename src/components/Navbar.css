@@ -61,3 +61,13 @@
     font-size: 1rem;
     font-style: oblique;
 }
+
+.bi-person {
+    padding: 2px;
+}
+
+.bi-person:hover {
+    background-color: rgb(0, 0, 0);
+    border-radius: 20px;
+    color: #fff;
+}

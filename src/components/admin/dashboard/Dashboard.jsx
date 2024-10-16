@@ -7,6 +7,7 @@ import { getCustomers } from "../../../service/AuthService"
 import dateFormat from "../../../utils/DateFormater"
 import "./Dashboard.css"
 import withAuth from "../../../context/withAuth"
+import Loader from "../../Loader"
 
 
 const Dashboard = () => {
@@ -63,51 +64,48 @@ const Dashboard = () => {
     
 
     return (
-        <div className="container dashboard p-2">
+        <div className="container-fluid dashboard">
             <p className="lead text-center">Welcome {userName}</p>
             {isLoading ? (
-                <p >Loading...</p> 
+                <Loader />
             ) : customers.length === 0 ? (
-                <p >No data available. Data will appear after customer is assigned</p>
+                <p >No data available. Data will appear once the customer is assigned</p>
             ) :
             <>
                 <section>
                     <p className="lead">Conversion Rates</p>
-                    <div className="stats">
+                    <div className="stats animated fadeInLeft">
                         <Cards>
-                            <p>Total customers: <span className="lead">{customers.length}</span></p>
+                            <p>Total customers: <span>{customers.length}</span></p>
                         </Cards>
                         <Cards>
-                            <p>Qualified Customers: <span className="lead">{qualifiedUser.length}</span></p>
+                            <p>Qualified Customers: <span>{qualifiedUser.length}</span></p>
                         </Cards>
                         <Cards>
-                            <p>Lost Customers: <span className="lead">{lostUser.length}</span></p>
+                            <p>Lost Customers: <span>{lostUser.length}</span></p>
                         </Cards>
     
                     </div>
                 </section>
                 <hr />
                 {/* Management only see the conversion percentage */}
-                {role !== "employee" ? 
-                (<section>
-                    
-                    <Cards>
-                        <p>conversion rate: <span className="lead">{((qualifiedUser.length / customers.length) * 100).toFixed(1)} %</span></p>
-                    </Cards>
-                    
+                <section className="animated fadeInLeft">
+                    {role !== "employee" ? (
+                        <Cards>
+                            <p>conversion rate: <span className="lead">{((qualifiedUser.length / customers.length) * 100).toFixed(1)} %</span></p>
+                        </Cards>
+                        
+                    ):(
+                        <Cards>
+                            <p>Today Assigned: <span className="lead">{newlyAssigned.length}</span></p>
+                            <p>Date: <span>{dateFormat(newlyAssigned[0]?.assignDate)}</span></p>
+                        </Cards>
+                        ) 
+                    }
                 </section>
-                ):(
-                <section>
-                    
-                    <Cards>
-                        <p>Today Assigned: <span className="lead">{newlyAssigned.length}</span></p>
-                        <p>Date: <span>{dateFormat(newlyAssigned[0]?.assignDate)}</span></p>
-                    </Cards>
-                    
-                </section>)
-                }
+               
                 <hr />
-                <section>
+                <section className="animated fadeInUp">
                     <p className='lead'>Performance</p>
                     <SalesPerformance customers={customers}/>
                 </section>

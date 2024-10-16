@@ -1,0 +1,95 @@
+.modal-container {
+    width: 100%;
+}
+
+.overview-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+
+.modal-container .overview {
+    background-color: rgb(238, 239, 239);
+    display: flex;
+    margin: 0 2rem;
+    border: 1px solid #e1e1e1;
+    border-radius: 9px;
+    margin-bottom: 5px;
+    padding: 2rem;
+}
+
+
+.user-info {
+    padding-left: 0.8rem;
+}
+
+.user-info .status {
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 0.8rem;
+}
+
+.user-info .user-description {
+    max-width: 300px;
+}
+
+.user-description .card {
+    padding: 15px;
+    word-wrap: break-word;
+    background-color: inherit;
+}
+
+.overview ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.overview li {
+    margin-bottom: 5px;
+}
+
+.customer-details button {
+    background: none;
+    border: none;
+}
+
+.action-toggle {
+    padding: 10px 2px;
+}
+
+.edit{
+    color: rgb(53, 155, 135);
+}
+
+.delete, .cancel{
+    color: red;
+}
+
+.update {
+    color: green;
+}
+
+.action-toggle div button h4 {
+    margin-bottom: 0;
+}
+
+.input-group .custom-select {
+    background-color: inherit;
+    border-color: black;
+}
+
+.form-control {
+    background-color: inherit;
+}
+
+.form-control:focus {
+    background-color: inherit;
+}
+
+.assign-client label{
+    text-transform: uppercase;
+    padding: 0 10px;
+}

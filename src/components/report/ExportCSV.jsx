@@ -14,9 +14,11 @@ const ExportCSV = ({ leadSource}) => {
   
 
   return (
-    <CSVLink data={csvData} headers={headers} filename={"sales-report.csv"}>
-      <button className='btn btn-success'>Export to CSV</button>
-    </CSVLink>
+    <div className='text-center p-2'>
+      <CSVLink data={csvData} headers={headers} filename={"sales-report.csv"}>
+        <button className='btn btn-success text-center'>Export</button>
+      </CSVLink>
+    </div>
   );
 };
 
