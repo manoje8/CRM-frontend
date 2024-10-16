@@ -1,16 +1,14 @@
 .dashboard
 {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    padding: 1rem;
     font-size: 0.75rem;
     font-weight: 400;
     letter-spacing: .025rem;
     line-height: 1.5rem;
-    height: 100vh;
 }
 
 .dashboard .stats
 {
-    padding: 1rem;
     width: 100%;
     display: flex;
     gap: 1.5rem;

@@ -1,0 +1,31 @@
+.query-input {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    gap: 5px;
+    word-break: break-all;
+}
+
+.query-input input:focus {
+    outline: none;
+}
+
+.solution-log {
+    height: 80px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.solution-log ol {
+    margin: 0;
+}
+
+
+.solution-log::-webkit-scrollbar {
+    width: 5px;
+    background-color: #2b2a40;
+}
+
+.solution-log::-webkit-scrollbar-thumb {
+    background-color: #fff;
+}

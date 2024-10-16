@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext"
 import withAuth from "../../context/withAuth"
 import { getQuery, getUserQuery, postQuery, putQuery, solutionQuery } from "../../service/UserService"
 import dateFormat from "../../utils/DateFormater"
+import "./Feedback.css"
 
 const Feedback = () => {
     const { role, userEmail} = useContext(AuthContext);
@@ -175,41 +176,40 @@ const Feedback = () => {
 
     // Query form
     const createQuery = () => (
-        <section className="container my-2 p-3 card" style={{width: "20rem"}}>
-                <h1 className="lead">Create Query</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Subject</label>
-                        <input name="subject" type="text" value={query.subject} className="form-control" onChange={handleChange} required/>
-                    </div>
-                    <div className="form-group">
-                        <label>Description</label>
-                        <input name="description" type="text" value={query.description} className="form-control" onChange={handleChange} required/>
-                    </div>
-                    <button type="submit" className="btn btn-primary btn-block" >Create</button> 
-                </form>
-            </section>
+        <section className="container card" style={{width: "20rem"}}>
+            <h1 className="lead">Create Query</h1>
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Subject</label>
+                    <input name="subject" type="text" value={query.subject} className="form-control" onChange={handleChange} required/>
+                </div>
+                <div className="form-group">
+                    <label>Description</label>
+                    <textarea name="description" type="text" value={query.description} className="form-control" onChange={handleChange} required/>
+                </div>
+                <button type="submit" className="btn btn-primary btn-block" >Create</button> 
+            </form>
+        </section>
     )
 
     // Solution log
     const querySolutionLog = (query) => (
-        <>
-            {query.solution.map((message,id) => (
-                <div key={id}>
-                    <ul>
-                        <li>{message}</li>
-                    </ul>
-                </div>
-            ))}
-        </>
+        <div className="solution-log">
+            <ol>
+                {query.solution.map((message, id) => (
+                        
+                    <li key={id}>{message}</li>
+                ))}
+            </ol>
+        </div>
     )
 
     return (
-        <div className="container">
+        <div className="container-fluid">
             {/* Employee only can create query to management */}
             {role === "employee" ? createQuery() : ""}
             <section>
-                <p className="lead mb-2">Queries</p>
+                <h2>Queries</h2>
                 <table className="table">
                     <thead>
                         <tr>
@@ -230,14 +230,14 @@ const Feedback = () => {
                             
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="animated fadeInLeft">
                     {
                         isLoading ? (
-                            <tr>
+                            <tr className="load">
                                 <td colSpan={8}>Loading...</td> 
                             </tr>
                         ) : allUserQueries.length === 0 ? (
-                            <tr>
+                            <tr className="load">
                                 <td colSpan={8}>No queries found</td>
                             </tr>
                         ) :
@@ -259,11 +259,11 @@ const Feedback = () => {
                                     {role !== "employee"? 
                                     <>
                                         <td>
-                                            <form onSubmit={querySolution} className="d-flex m-0">
-                                                <div className="pr-1">
-                                                    <input name="solution" className="" onChange={(e) => setSolution({queryId: query._id, message: e.target.value})} required/>
-                                                </div>
-                                                <button type="submit" className="btn btn-primary btn-sm" >Send</button>
+                                            <form onSubmit={querySolution} className="query-input">
+                                                <input name="solution" onChange={(e) => setSolution({queryId: query._id, message: e.target.value})} required/>
+                                                <button type="submit" className="btn btn-primary btn-sm" >
+                                                    <i className="bi bi-send"></i>
+                                                </button>
                                             </form>
                                         </td>
                                         <td>

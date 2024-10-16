@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useMemo, useState } from "react"
 import { AuthContext } from "../../../context/AuthContext"
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -70,13 +70,9 @@ const Customer = () => {
     }
 
     // Search handle
-    const handleSearch = (e) => {
-        e.preventDefault();
-        const searchResult = customerData.filter((data) =>
-            data.name.toLowerCase().includes(searchValue.toLowerCase())
-        );
-        setCustomerData(searchResult);
-    };
+    const filterValue = useMemo(() => {
+        return customerData.filter(data =>data.name.toLowerCase().includes(searchValue.toLowerCase()))
+    }, [customerData, searchValue])
 
 
     const customerTable = () => (
@@ -92,18 +88,18 @@ const Customer = () => {
                     <th scope="col">Title</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody className="animated fadeInUp">
                 {
                     isLoading ? (
-                        <tr>
+                        <tr className="load">
                           <td colSpan={8}>Loading...</td> 
                         </tr>
                       ) : customerData.length === 0 ? (
-                        <tr>
+                        <tr className="load">
                           <td colSpan={8}>No customers found</td>
                         </tr>
                       ) :
-                        (customerData.map((data, id) => (
+                        (filterValue.map((data, id) => (
                         <tr key={id} className="table-body" onClick={() => handleClick(data._id)}>
                             <th scope="row">{id+1}</th>
                             <td>{data.name}</td>
@@ -122,15 +118,14 @@ const Customer = () => {
     return (
         <div className="container customer-container">
             <div className="customer-nav">
-            <div className="search">
-                    <form className="form-inline my-2 my-lg-0" onSubmit={handleSearch}>
-                        <input className="form-control mr-sm-2" value={searchValue}  type="search" aria-label="Search"
+                <div className="search">
+                    <form className="form-inline my-2 my-lg-0" role="search">
+                        <i className="bi bi-search mx-2"></i>
+                        <input className="form-control form-control-sm" value={searchValue}  type="search" aria-label="Search"
                             onChange={(e) => setSearchValue(e.target.value)}
                             placeholder="Search by name" 
                         />
-                        <button className="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">
-                            Search
-                        </button>
+                        
                     </form>
                 </div>
 
@@ -141,7 +136,7 @@ const Customer = () => {
                     
                 </div>
             </div>
-            <div className="container p-4">
+            <div className="container">
             {customerTable()}
             </div>
         </div>

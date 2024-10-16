@@ -6,8 +6,11 @@ import AppRoutes from './routes';
 import './index.css';
 import "react-toastify/dist/ReactToastify.css";
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+/**
+ * concurrent mode, which allows React to update the UI in a more efficient and 
+ * responsive way by breaking up large updates into smaller chunks.
+*/
+const root = ReactDOM.createRoot(document.getElementById('root'), {mode: 'concurrent'});
 root.render(
     <Router>
       <ToastContainer autoClose={1000}/>

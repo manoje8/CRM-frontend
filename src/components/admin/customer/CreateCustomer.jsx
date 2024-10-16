@@ -107,7 +107,7 @@ const CreateCustomer = () => {
                             <label>Source</label>
                             <div className="input-group mb-3">
                                 <select name="source" className="custom-select" id="sourceSelector" defaultValue="none" onChange={handleChange}>
-                                    <option defaultValue="none">None...</option>
+                                    <option value="none">None</option>
                                     <option value="website form">website form</option>
                                     <option value="social media">Social media</option>
                                     <option value="referral">Referrral</option>

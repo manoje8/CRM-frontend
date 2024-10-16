@@ -66,7 +66,7 @@ const Navbar = () => {
                     </a>
                     
                     <div className="dropdown-menu dropdown-menu-right" id="profile">
-                        <p>{userName}</p>
+                        <span>{userName}</span>
                         {token ? 
                         <div className="options">
                             {role !== 'new' ? <a href="/dashboard">Dashboard</a> : " "}

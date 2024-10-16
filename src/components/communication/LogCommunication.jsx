@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
+import { getCommunication } from "../../service/AuthService";
 import { toast } from "react-toastify";
 import "../home/Home.css"
-import { getCommunication } from "../../service/AuthService";
+
 
 const LogCommunication = ({userId}) => {
     const [communications, setCommunications] = useState([]);
@@ -32,19 +33,21 @@ const LogCommunication = ({userId}) => {
     },[fetchData,userId])
 
     return (
-        <section>
-            <p className="lead my-2">Communication Log</p>
+        <section className="communication-box">
+            <p className="lead">Communication Log</p>
             <ul>
-                {communications.length === 0 ? <p className="my-5"><strong>Empty</strong></p> :
+                {communications.length === 0 ? 
+                <p><strong>Empty</strong></p> 
+                :
                 communications.map(comm => (
-                <div className="card" key={comm._id}>
-                    <div className="card-body">
-                        <p><strong>Type:</strong> {comm.type}</p>
-                        <p><strong>Date:</strong> {new Date(comm.createdAt).toLocaleString()}</p>
-                        <p><strong>Content:</strong> {comm.subject}</p>
-                        <p><strong>Content:</strong> {comm.content}</p>
+                    <div className="card animated fadeIn" key={comm._id}>
+                        <div className="card-body">
+                            <p><strong>Type:</strong> {comm.type}</p>
+                            <p><strong>Date:</strong> {new Date(comm.createdAt).toLocaleString()}</p>
+                            <p><strong>Subject:</strong> {comm.subject}</p>
+                            <p><strong>Content:</strong> {comm.content}</p>
+                        </div>
                     </div>
-                </div>
                 ))}
             </ul>
         </section>

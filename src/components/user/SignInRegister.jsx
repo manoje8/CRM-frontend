@@ -4,10 +4,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import Spinner from "../Spinner";
 
 const SignInRegister = () => {
     const navigate = useNavigate()
     const {setToken, setUserName, setRole, setUserEmail} = useContext(AuthContext)
+    const [loading, setLoading] = useState(false)
     const [values, setValues] = useState({
         email: "",
         password: ""
@@ -26,6 +28,7 @@ const SignInRegister = () => {
 
         try 
         {
+            setLoading(true)
             const response = await axios({
                 method: 'post',
                 url: `${process.env.REACT_APP_API_URL}/user/login`,
@@ -54,8 +57,9 @@ const SignInRegister = () => {
                 })
             }
             navigate("/")
-            window.location.reload(false);
-        } catch (error) 
+            navigate(0)
+        } 
+        catch (error) 
         {
             console.error("Authentication failed:", error);
             setToken(null);
@@ -70,6 +74,10 @@ const SignInRegister = () => {
                     hideProgressBar: false
                 })
             }
+        }
+        finally
+        {
+            setLoading(false)
         }
     }
 
@@ -88,7 +96,15 @@ const SignInRegister = () => {
                     <label>Password</label>
                     <input name="password" type="password" className="form-control" onChange={handleChange} required/>
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">Sign in</button>
+                {
+                loading ? 
+                ( <Spinner buttonName={"Login..."}/> ) 
+                : 
+                (
+                    <button type="submit" className="btn btn-primary btn-block">Sign in</button>
+                )
+            }
+                
                 <p className="forgot-password mb-2">
                     <a href="/user/forgot-password">Forgotten your password?</a>
                 </p>

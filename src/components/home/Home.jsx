@@ -24,11 +24,11 @@ const Home = () => {
     <div className="home">
         <div className="heading">
             <h1 className="display-4">Whatever your goal, CRM will help your business thrive.</h1>
-            <p className="lead">The CRM that's simple to set up and easy to use </p>
+            <h5>The CRM that's simple to set up and easy to use </h5>
             <hr />
             <a className="btn btn-secondary" href="/user/login">Get Started</a>
         </div>
-        <p className="lead text-center text-light">Transform your business with CRM</p>
+        <h3 className="text-center"><span>Transform your business with CRM</span></h3>
         
         <div className="features">
             {

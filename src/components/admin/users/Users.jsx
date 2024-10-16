@@ -108,7 +108,7 @@ const Users = () => {
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="animated fadeInLeft">
                     {
                         isLoading ? (
                             <tr>

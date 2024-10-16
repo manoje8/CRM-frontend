@@ -1,12 +1,12 @@
 import { useCallback, useContext, useEffect, useState } from "react"
-import { AuthContext } from "../../context/AuthContext"
-import { toast } from "react-toastify"
+import { AuthContext } from "../../../context/AuthContext"
+import LogCommunication from "../../communication/LogCommunication"
+import { putCustomer } from "../../../service/CommonService"
+import { deleteCustomer, getCustomerById, updateCustomerStatus } from "../../../service/AuthService"
+import { getUsers, updateCustomerAssign } from "../../../service/UserService"
+import withAuth from "../../../context/withAuth"
 import { useNavigate } from "react-router-dom"
-import LogCommunication from "../communication/LogCommunication"
-import { putCustomer } from "../../service/CommonService"
-import { deleteCustomer, getCustomerById, updateCustomerStatus } from "../../service/AuthService"
-import { getUsers, updateCustomerAssign } from "../../service/UserService"
-import withAuth from "../../context/withAuth"
+import { toast } from "react-toastify"
 import "./Overview.css"
 
 
@@ -238,8 +238,8 @@ const Overview = () => {
         <div className="modal-container">
             <div className="box">
                 <div className="overview-title">
-                    <h4>Overview</h4>
-                    <div className="col-md-3 d-flex justify-content-around">
+                    <h2>Overview</h2>
+                    <div>
                         {/* <a className="btn btn-info btn-sm" href="/">Convert</a> */}
                         <button className="btn btn-warning btn-sm" onClick={() => navigate("/customer")}>Back</button>
                     </div>
@@ -247,9 +247,10 @@ const Overview = () => {
                 </div>
                 
                 <div className="overview">
-                    <section>
-                        <h4>Personel Details</h4>
-                        <div className="customer-details pr-3">
+                    <section className="col-md-6 ">
+                        <p className="lead">Personel Details</p>
+                        <hr />
+                        <div className="customer-details animated fadeInLeft">
                             <ul>
                                 <li><span><b>Name:  </b></span>{editFlag ? <input name = "name" className="form-control" value={updateValue.name} onChange={handleUpdate}/>:customerView.name}</li>
                                 <li><span><b>Company:  </b></span>{editFlag ? <input name = "company" className="form-control" value={updateValue.company} onChange={handleUpdate}/>:customerView.company}</li>
@@ -267,53 +268,44 @@ const Overview = () => {
                                     <li><span><b>Brand:  </b></span>{editFlag ? <input name = "brand" className="form-control" value={updateValue.preferences.brand} onChange={handleUpdate}/>:customerView.preferences?.brand}</li>
                                 </ul>
                             </div>
-                            {editFlag ?
-                                        <div>
-                                            <button onClick={(e) => {updateCustomer(e)}}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-check-lg" viewBox="0 0 16 16">
-                                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-                                                </svg>
+                            <div className="action-toggle">
+                                {editFlag ?
+                                    <div>
+                                        <button onClick={(e) => {updateCustomer(e)}}>
+                                            <h4 className="update"><i className="bi bi-check-lg"></i></h4>
+                                        </button>
+                                        <button  onClick={() => setEditFlag(false)}>
+                                            <h4 className="cancel"><i className="bi bi-x-circle"></i></h4>
+                                        </button>
+                                    </div>
+                                            : 
+                                    <div>
+                                        {role !== "employee" ? 
+                                        <>
+                                            <button onClick={() => handleEdit()}>
+                                                <h4 className="edit"><i className="bi bi-pencil-square"></i></h4>
                                             </button>
-                                            <button  onClick={() => setEditFlag(false)}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
-                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                                                </svg>
+                                            {role === "admin"?
+                                            <button onClick={() => handleDelete(userId)} >
+                                                <h4 className="delete"><i className="bi bi-trash"></i></h4>
                                             </button>
-                                        </div>
-                                                : 
-                                        <div>
-                                            {role !== "employee" ? 
-                                            <>
-                                                <button onClick={() => handleEdit()}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                        <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                                                    </svg>
-                                                </button>
-                                                {role === "admin"?
-                                                <button>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" onClick={() => handleDelete(userId)} className="bi bi-trash" viewBox="0 0 16 16">
-                                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                                                    </svg>
-                                                </button>
-                                                : "" }
-                                            </>
-                                            : ""}
-                                        </div>
-                                    } 
+                                            : "" }
+                                        </>
+                                        : ""}
+                                    </div>
+                                }
+                                    
+                            </div> 
                         </div>
-
                         <hr />
                         <div>
                             <LogCommunication userId={userId}/>
                         </div>
                         
                     </section>
-                    <section className="ml-4">
-                        <h4>Status</h4>
-                        <div className="d-flex justify-content-around my-3">
+                    <section className="user-info">
+                        <p className="lead">Status</p>
+                        <div className="status animated fadeInDown">
                             <div className="input-group col-md-6">
                                 <select name="status" value = {customerView.status} className="custom-select" id="statusSelector" onChange={(e) => updateStatus(customerView._id, e.target.value)}>
                                     <option value="none">None</option>
@@ -329,15 +321,17 @@ const Overview = () => {
                             {/* <a className="btn btn-info" href="/feedback">Feedback</a>  */}
                         </div>
                         <hr />
-                        <div className="card col-md-8 mt-3">
-                            <p><i>Information: </i></p>
-                            <div><span><b>Title:  </b></span>{customerView.title}</div>
-                            <div><span><b>Description:  </b></span>{customerView.description}</div>
+                        <div className="user-description animated fadeInUp">
+                            <p className="lead">Description:</p>
+                            <div className="card">
+                                <div><span><b>Title:  </b></span>{customerView.title}</div>
+                                <div><span><b>Description:  </b></span>{customerView.description}</div>
+                            </div>
                         </div>
                         <hr />
                         {role === "manager" ? 
-                            <div className="input-group col-md-6">
-                                <label htmlFor="employeeSelector" className="initialism p-1">Assign To:</label>
+                            <div className="input-group assign-client">
+                                <label htmlFor="employeeSelector">Assign To:</label>
                                 <select name="employee" className="custom-select" id="employeeSelector" value={customerView.assignEmployee || ""} onChange={(e) => handleAssign(customerView._id, e.target.value, 'employee')}>
                                     <option value="" >Select an employee</option>
                                     {users.map((user, id) => (
@@ -347,8 +341,8 @@ const Overview = () => {
                                 </select>
                             </div>
                             : role === "admin" ?
-                                <div className="input-group col-md-6">
-                                    <label htmlFor="managerSelector" className="initialism p-1">Assign To:</label>
+                                <div className="input-group assign-client">
+                                    <label htmlFor="managerSelector">Assign To:</label>
                                     <select name="manager" className="custom-select" id="managerSelector" value={customerView.assignManager || ""} onChange={(e) => handleAssign(customerView._id, e.target.value, 'manager')}>
                                         <option value="" >Select a Manager</option>
                                         {users.map((user, id) => (
